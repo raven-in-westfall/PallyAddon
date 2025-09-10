@@ -1,0 +1,105 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+	<Script file="CrusaderStrike.lua" />
+	<Frame name="crusader_strike_CounterTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="47" y="22" />
+		</Size>
+		<Layers>
+			<Layer level="BACKGOUND">
+				<Texture name="$parent_TEXTURE" file="Interface\Addons\PallyAddon\textures\grey.tga">
+					<Size>
+						<AbsDimension x="45" y="20" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="0" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0.375" right="0.5625" top="0" bottom="1" />
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+	<Frame name="crusader_strike_counter_core" enableMouse="true" movable="true"
+		frameStrata="MEDIUM"
+		toplevel="true" hidden="false" parent="UIParent">
+		<Size>
+			<AbsDimension x="128" y="22" />
+		</Size>
+		<Anchors>
+			<Anchor point="RIGHT" relativeTo="Minimap" relativePoint="LEFT">
+				<Offset>
+					<AbsDimension x="0" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Frame name="crusader_strike_Counter1" inherits="crusader_strike_CounterTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="0" y="0" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Frame>
+			<Frame name="crusader_strike_Counter2" inherits="crusader_strike_CounterTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="crusader_strike_Counter1" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="0" y="11" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Frame>
+			<Frame name="crusader_strike_Counter3" inherits="crusader_strike_CounterTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="crusader_strike_Counter2" relativePoint="RIGHT">
+						<Offset>
+							<AbsDimension x="0" y="11" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Frame>
+			<Frame name="crusader_strike_timer">
+				<Size>
+					<AbsDimension x="141" y="10" />
+				</Size>
+			</Frame>
+		</Frames>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="crusader_strike_counter_display" hidden="false"
+					inherits="GameFontNormal">
+					<Anchors>
+						<Anchor point="TOP">
+							<Offset>
+								<AbsDimension x="0" y="-10" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				crusader_strike_counter_OnLoad();
+			</OnLoad>
+			<OnEvent>
+				crusader_strike_counter_OnEvent();
+			</OnEvent>
+			<OnDragStart>
+				crusader_strike_counter_OnDragStart();
+			</OnDragStart>
+			<OnDragStop>
+				crusader_strike_counter_OnDragStop();
+			</OnDragStop>
+			<OnUpdate>
+				crusader_strike_status_bar_OnUpdate();
+			</OnUpdate>
+		</Scripts>
+	</Frame>
+</Ui>

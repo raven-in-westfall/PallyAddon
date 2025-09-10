@@ -1,0 +1,9 @@
+## Interface: 100200 ## This number is for Turtle WoW, but may change. Check the Wiki or similar addons for the correct version.
+## Title: PallyAddon
+## Notes: Show pally things
+## Author: John Westcott IV
+## Version: 1.0.0 ## The addon's version number.
+PallyAddon.lua
+Redoubt.xml
+CrusaderStrike.xml
+CheckBuffs.xml

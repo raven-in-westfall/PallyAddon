@@ -12,11 +12,6 @@ function redoubtcounter_OnLoad()
     
 	
     PallyAddonLog("PallyAddon - Redoubt Loaded")
-    --[[
-    SLASH_RECKCOUNTER1 = "/reckcounter";
-    SLASH_RECKCOUNTER2 = "/reck";
-    SlashCmdList["RECKCOUNTER"] = reckcounter_Command;    
-    --]]
 end
 
 function redoubtcounter_initialize()
@@ -33,6 +28,7 @@ function update_redoubtcounter(redoubt)
     --Updates GUI to reflect redoubtonings stored
     --Shamelessly cut from ComboFrame.lua
     if ( redoubt > 0 ) then		
+        redoubtcounter_core:Show()
         for i=1, REDOUBT_BLOCKS do
 	    comboPointHighlight = getglobal("RedoubtCounter"..i.."Highlight");
 	    comboPointShine = getglobal("RedoubtCounter"..i.."Shine");
@@ -52,16 +48,20 @@ function update_redoubtcounter(redoubt)
 	    end
 	end
     else
-        RedoubtCounter1Highlight:SetAlpha(0);
-	    RedoubtCounter1Shine:SetAlpha(0);
-	    RedoubtCounter2Highlight:SetAlpha(0);
-	    RedoubtCounter2Shine:SetAlpha(0);
-	    RedoubtCounter3Highlight:SetAlpha(0);
-	    RedoubtCounter3Shine:SetAlpha(0);
-	    RedoubtCounter4Highlight:SetAlpha(0);
-	    RedoubtCounter4Shine:SetAlpha(0);
-	    RedoubtCounter5Highlight:SetAlpha(0);
-	    RedoubtCounter5Shine:SetAlpha(0);
+        if UnitAffectingCombat("player") == nil then
+            redoubtcounter_core:Hide()
+        else
+            RedoubtCounter1Highlight:SetAlpha(0);
+	        RedoubtCounter1Shine:SetAlpha(0);
+	        RedoubtCounter2Highlight:SetAlpha(0);
+	        RedoubtCounter2Shine:SetAlpha(0);
+	        RedoubtCounter3Highlight:SetAlpha(0);
+	        RedoubtCounter3Shine:SetAlpha(0);
+	        RedoubtCounter4Highlight:SetAlpha(0);
+	        RedoubtCounter4Shine:SetAlpha(0);
+	        RedoubtCounter5Highlight:SetAlpha(0);
+	        RedoubtCounter5Shine:SetAlpha(0);
+        end
     end
 end
 

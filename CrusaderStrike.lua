@@ -1,4 +1,5 @@
 CRUSADER_STRIKE_TICKS = 3
+CRUSADER_STRIKE_CURRENT_TICKS = 0
 CRUSADER_STRIKE_MOVEABLE = true
 CRUSADER_STRIKE_VERBOSE = false
 CRUSADER_STRIKE_MAX_TIME = 30
@@ -11,18 +12,12 @@ function crusader_strike_counter_OnLoad()
     this:RegisterForDrag("LeftButton");
     this:RegisterEvent("VARIABLES_LOADED"); --Watch for initialization
     this:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
-    
-	
+
+
     PallyAddonLog("PallyAddon - crusader_strike Loaded", CRUSADER_STRIKE_VERBOSE)
-    --[[
-    SLASH_RECKCOUNTER1 = "/reckcounter";
-    SLASH_RECKCOUNTER2 = "/reck";
-    SlashCmdList["RECKCOUNTER"] = reckcounter_Command;    
-    --]]
 
     -- Create a status bar as a child of the main frame
     local frame = crusader_strike_timer
-    frame:SetPoint("TOP", 3, -20) -- Adjust position as needed
     frame:SetFrameStrata("HIGH")
 
     CRUSADER_STRIKE_STATUS_BAR = CreateFrame("StatusBar", nil, frame)
@@ -41,7 +36,7 @@ function crusader_strike_status_bar_OnUpdate()
     if CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME > CRUSADER_STRIKE_STATUS_BAR_REFRESH_TIME_IN_SEC then
         if CRUSADER_STRIKE_TIME_LEFT >= 0 then
             CRUSADER_STRIKE_TIME_LEFT = CRUSADER_STRIKE_TIME_LEFT - CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME
-            PallyAddonLog("Time left on crusader_strike = ".. CRUSADER_STRIKE_TIME_LEFT, CRUSADER_STRIKE_VERBOSE)
+            -- PallyAddonLog("Time left on crusader_strike = ".. CRUSADER_STRIKE_TIME_LEFT, CRUSADER_STRIKE_VERBOSE)
             crusader_strike_update_status_bar()
         end
         CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME = 0
@@ -62,17 +57,17 @@ function update_crusader_strike_counter(crusader_strike)
     --Updates GUI to reflect crusader_strikeonings stored
     --Shamelessly cut from ComboFrame.lua
     for i=1, CRUSADER_STRIKE_TICKS do
-        textureObjectName = "crusader_strike_Counter"..i.."_TEXTURE"
+        textureObjectName = "crusader_strike_Counter"..i
 	    local texture = getglobal(textureObjectName)
         PallyAddonLog("Texture name: ".. textureObjectName, CRUSADER_STRIKE_VERBOSE)
 	    if ( i <= crusader_strike ) then
             PallyAddonLog("Need to highlight ".. i, CRUSADER_STRIKE_VERBOSE)
-            texture:SetTexture("Interface\\Addons\\PallyAddon\\textures\\yellow.tga")
+            texture:Show()
             CRUSADER_STRIKE_TIME_LEFT = CRUSADER_STRIKE_MAX_TIME
             crusader_strike_update_status_bar()
 	    else
             PallyAddonLog("Need to un-highlight ".. i, CRUSADER_STRIKE_VERBOSE)
-            texture:SetTexture("Interface\\Addons\\PallyAddon\\textures\\grey.tga")
+            texture:Hide()
 	    end
     end
 end
@@ -96,10 +91,12 @@ function check_crusader_strike()
             break -- No more buffs to check
         end
         if name == "Interface\\Icons\\Spell_Holy_CrusaderStrike" then
-            local _, remaining_time = GetPlayerBuff(index)
-            PallyAddonLog("Found crusader_strike with " .. count .." charges ".. " reamining time ".. remaining_time, CRUSADER_STRIKE_VERBOSE)
-            update_crusader_strike_counter(count)
-            break
+            if count ~= CRUSADER_STRIKE_CURRENT_TICKS then
+                CRUSADER_STRIKE_CURRENT_TICKS = count
+                PallyAddonLog("Found crusader_strike with " .. count .." charges", CRUSADER_STRIKE_VERBOSE)
+                update_crusader_strike_counter(count)
+                break
+            end
         end
         index = index + 1
     end

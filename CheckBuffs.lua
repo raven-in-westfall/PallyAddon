@@ -13,15 +13,15 @@ function Check_Buffs_OnLoad()
     this:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
 
     PallyAddonLog("PallyAddon - check_buffs Loaded", CHECK_BUFFS_VERBOSE)
+    Check_Buffs()
 end
 
 function Check_Buffs_Initialize()
     if (UnitClass("player") ~= "Paladin") then
         --Auto hides if Player is not a Paladin
         check_buffs_core:Hide();
-    else
-        Check_Buffs()
     end
+    Check_Buffs()
 end 
 
 function Check_Buffs()

@@ -9,22 +9,22 @@ RF = 'Interface\\Icons\\Spell_Holy_SealOfFury'
 
 function Check_Buffs_OnLoad()
     this:RegisterForDrag("LeftButton");
-    this:RegisterEvent("VARIABLES_LOADED"); --Watch for initialization
     this:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
 
     PallyAddonLog("PallyAddon - check_buffs Loaded", CHECK_BUFFS_VERBOSE)
+    if PallyAddonIsPaladin() == false then
+        --Auto hides if Player is not a Paladin
+        check_buffs_core:Hide();
+        check_buffs_rf:Hide()
+        check_buffs_rf:Hide()
+    end
     Check_Buffs()
 end
 
-function Check_Buffs_Initialize()
-    if (UnitClass("player") ~= "Paladin") then
-        --Auto hides if Player is not a Paladin
-        check_buffs_core:Hide();
-    end
-    Check_Buffs()
-end 
-
 function Check_Buffs()
+    if PallyAddonIsPaladin() == false then
+        return
+    end
     local index = 1
     local has_rf = false
     local has_aura = false
@@ -61,10 +61,6 @@ end
 function Check_Buffs_OnEvent()
     if(event == "UNIT_AURA" and arg1 == "player") then
         Check_Buffs()
-    end
-
-    if(event == "VARIABLES_LOADED" ) then
-        Check_Buffs_Initialize()
     end
 end
 

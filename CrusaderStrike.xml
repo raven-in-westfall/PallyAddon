@@ -1,8 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
 	<Script file="CrusaderStrike.lua" />
-	<Frame name="crusader_strike_CounterTemplate" virtual="true">
-	</Frame>
 	<Frame name="crusader_strike_counter_core" enableMouse="true" movable="true"
 		frameStrata="MEDIUM"
 		toplevel="true" hidden="false" parent="UIParent">
@@ -136,10 +134,10 @@
 				crusader_strike_counter_OnEvent();
 			</OnEvent>
 			<OnDragStart>
-				crusader_strike_counter_OnDragStart();
+				PallyAddonOnDragStart(crusader_strike_counter_core);
 			</OnDragStart>
 			<OnDragStop>
-				crusader_strike_counter_OnDragStop();
+				PallyAddonOnDragStop(crusader_strike_counter_core);
 			</OnDragStop>
 			<OnUpdate>
 				crusader_strike_status_bar_OnUpdate();

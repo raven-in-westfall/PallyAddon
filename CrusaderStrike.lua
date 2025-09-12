@@ -44,13 +44,12 @@ function crusader_strike_status_bar_OnUpdate()
 end
 
 function crusader_strike_counter_initialize()
-    if (UnitClass("player") ~= "Paladin") then
+    if PALLY_ADDON_IS_PALADIN then
+        update_crusader_strike_counter(0);
+    else
         --Auto hides if Player is not a Paladin
         crusader_strike_counter_core:Hide();
     end
-    --Sets crusader_strike_counter text above combo gauge (might remove ifv) 
-    --crusader_strike_counter_display:SetText("crusader_strike_Counter");
-    update_crusader_strike_counter(0);
 end 
 
 function update_crusader_strike_counter(crusader_strike)
@@ -110,17 +109,4 @@ function crusader_strike_counter_OnEvent()
     if(event == "VARIABLES_LOADED" ) then
         crusader_strike_counter_initialize()
     end
-end
-
-
-function crusader_strike_counter_OnDragStart()
-    if (CRUSADER_STRIKE_MOVEABLE == true ) then
-        this:StartMoving();
-        this.isMoving = true;
-    end
-end
-
-function crusader_strike_counter_OnDragStop()
-    this:StopMovingOrSizing();
-    this.isMoving = false;
 end

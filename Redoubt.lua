@@ -15,13 +15,14 @@ function redoubtcounter_OnLoad()
 end
 
 function redoubtcounter_initialize()
-    if (UnitClass("player") ~= "Paladin") then
+    if PALLY_ADDON_IS_PALADIN then
+        --Sets redoubtcounter text above combo gauge (might remove ifv) 
+        --redoubtcounter_display:SetText("redoubtCounter");
+        update_redoubtcounter(0);
+    else
         --Auto hides if Player is not a Paladin
         redoubtcounter_core:Hide();
     end
-    --Sets redoubtcounter text above combo gauge (might remove ifv) 
-    --redoubtcounter_display:SetText("redoubtCounter");
-    update_redoubtcounter(0);
 end 
 
 function update_redoubtcounter(redoubt)
@@ -109,17 +110,4 @@ end
 
 function ComboPointShineFadeOut(frameName)
 	UIFrameFadeOut(getglobal(frameName), .8);
-end
-
-
-function redoubtcounter_OnDragStart()
-    if (redoubtcounter_movable == true ) then
-        this:StartMoving();
-        this.isMoving = true;
-    end
-end
-
-function redoubtcounter_OnDragStop()
-    this:StopMovingOrSizing();
-    this.isMoving = false;
 end

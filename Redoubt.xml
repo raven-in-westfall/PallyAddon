@@ -129,10 +129,10 @@
 				redoubtcounter_OnEvent();
 			</OnEvent>
 			<OnDragStart>
-				redoubtcounter_OnDragStart();
+				PallyAddonOnDragStart();
 			</OnDragStart>
 			<OnDragStop>
-				redoubtcounter_OnDragStop();
+				PallyAddonOnDragStop();
 			</OnDragStop>
 		</Scripts>
 	</Frame>

@@ -7,22 +7,23 @@ AURAS = {
 }
 RF = 'Interface\\Icons\\Spell_Holy_SealOfFury'
 
-function Check_Buffs_OnLoad()
-    this:RegisterForDrag("LeftButton");
-    this:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
-
-    PallyAddonLog("PallyAddon - check_buffs Loaded", CHECK_BUFFS_VERBOSE)
-    if PallyAddonIsPaladin() == false then
+function Check_Buffs_Initialize()
+    if PALLY_ADDON_IS_PALADIN then
+        PallyAddonLog("PallyAddon - check_buffs Loaded", CHECK_BUFFS_VERBOSE)
+        Check_Buffs()
+        PallyAddonLog("Registering events")
+        check_buffs_core:RegisterForDrag("LeftButton");
+        check_buffs_core:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
+    else
         --Auto hides if Player is not a Paladin
+        PallyAddonLog("Player is not pally", CHECK_BUFFS_VERBOSE)
         check_buffs_core:Hide();
-        check_buffs_rf:Hide()
-        check_buffs_rf:Hide()
     end
-    Check_Buffs()
 end
 
 function Check_Buffs()
-    if PallyAddonIsPaladin() == false then
+    PallyAddonLog("Checking Buffs", CHECK_BUFFS_VERBOSE)
+    if PALLY_ADDON_IS_PALADIN == false then
         return
     end
     local index = 1
@@ -62,17 +63,4 @@ function Check_Buffs_OnEvent()
     if(event == "UNIT_AURA" and arg1 == "player") then
         Check_Buffs()
     end
-end
-
-
-function Check_Buffs_OnDragStart()
-    if (CHECK_BUFFS_MOVABLE == true ) then
-        this:StartMoving();
-        this.isMoving = true;
-    end
-end
-
-function Check_Buffs_OnDragStop()
-    this:StopMovingOrSizing();
-    this.isMoving = false;
 end

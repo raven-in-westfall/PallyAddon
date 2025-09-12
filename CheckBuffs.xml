@@ -87,17 +87,14 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-				Check_Buffs_OnLoad();
-			</OnLoad>
 			<OnEvent>
 				Check_Buffs_OnEvent();
 			</OnEvent>
 			<OnDragStart>
-				Check_Buffs_OnDragStart();
+				PallyAddonOnDragStart(check_buffs_core);
 			</OnDragStart>
 			<OnDragStop>
-				Check_Buffs_OnDragStop();
+				PallyAddonOnDragStop(check_buffs_core);
 			</OnDragStop>
 		</Scripts>
 	</Frame>

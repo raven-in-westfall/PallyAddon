@@ -1,0 +1,13 @@
+<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+    <Script file="PallyAddon.lua" />
+    <Frame name="PallyAddon" toplevel="true" visible="false" movable="true" enableMouse="true" parent="UIParent">
+        <Scripts>
+            <OnLoad>
+                pally_addon_OnLoad();
+            </OnLoad>
+            <OnEvent>
+                pally_addmin_OnEvent();
+            </OnEvent>
+        </Scripts>
+    </Frame>
+</Ui>

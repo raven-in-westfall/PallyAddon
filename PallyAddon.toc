@@ -3,7 +3,7 @@
 ## Notes: Show pally things
 ## Author: John Westcott IV
 ## Version: 1.0.0 ## The addon's version number.
-PallyAddon.lua
+PallyAddon.xml
 Redoubt.xml
 CrusaderStrike.xml
 CheckBuffs.xml

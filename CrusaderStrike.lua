@@ -6,6 +6,7 @@ CRUSADER_STRIKE_TIME_LEFT = 0
 CRUSADER_STRIKE_STATUS_BAR_REFRESH_TIME_IN_SEC = .1
 CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME = 0
 CRUSADER_STRIKE_STATUS_BAR = nil
+CRUSADER_STRIKE_CHAT_MSG_PREFIX = "Your Crusader Strike hits "
 
 function crusader_strike_status_bar_OnUpdate()
     CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME = CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME + arg1
@@ -30,6 +31,7 @@ function crusader_strike_counter_initialize()
     PallyAddonLog("Registering events for crusader strike", CRUSADER_STRIKE_VERBOSE);
     crusader_strike_counter_core:RegisterForDrag("LeftButton");
     crusader_strike_counter_core:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
+    crusader_strike_counter_core:RegisterEvent("CHAT_MSG_SPELL_SELF_DAMAGE"); -- Watch for spell cast success
 
     -- Create a status bar as a child of the main frame
     local frame = crusader_strike_timer
@@ -58,8 +60,6 @@ function update_crusader_strike_counter(crusader_strike)
 	    if ( i <= crusader_strike ) then
             PallyAddonLog("Need to highlight ".. i, CRUSADER_STRIKE_VERBOSE)
             texture:Show()
-            CRUSADER_STRIKE_TIME_LEFT = CRUSADER_STRIKE_MAX_TIME
-            crusader_strike_update_status_bar()
 	    else
             PallyAddonLog("Need to un-highlight ".. i, CRUSADER_STRIKE_VERBOSE)
             texture:Hide()
@@ -87,6 +87,9 @@ function check_crusader_strike()
         end
         PallyAddonLog("Found buff ".. name, CRUSADER_STRIKE_VERBOSE)
         if name == "Interface\\Icons\\Spell_Holy_CrusaderStrike" then
+            --
+            -- THere is a bug here if count == 3 for a second time we aren't refreshing the timer!
+            -- See if we can catch the cast on some kind of 'spell casted" trigger
             if count ~= CRUSADER_STRIKE_CURRENT_TICKS then
                 CRUSADER_STRIKE_CURRENT_TICKS = count
                 PallyAddonLog("Found crusader_strike with " .. count .." charges", CRUSADER_STRIKE_VERBOSE)
@@ -99,7 +102,12 @@ function check_crusader_strike()
 end
 
 function crusader_strike_counter_OnEvent()
+    if(event == "CHAT_MSG_SPELL_SELF_DAMAGE" and string.find(arg1, CRUSADER_STRIKE_CHAT_MSG_PREFIX) ~= nil) then
+        CRUSADER_STRIKE_TIME_LEFT = CRUSADER_STRIKE_MAX_TIME
+        crusader_strike_update_status_bar()
+    end
     if(event == "UNIT_AURA" and arg1 == "player") then
         check_crusader_strike()
+        return
     end
 end

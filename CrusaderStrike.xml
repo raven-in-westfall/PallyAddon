@@ -127,9 +127,6 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-				crusader_strike_counter_OnLoad();
-			</OnLoad>
 			<OnEvent>
 				crusader_strike_counter_OnEvent();
 			</OnEvent>

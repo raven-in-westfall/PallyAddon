@@ -29,6 +29,8 @@ function pally_addmin_OnEvent()
         PallyAddonLog("Processing login event for PallyAddon", PALLY_ADDON_VERBOSE);
         PallyAddonIsPaladin()
         Check_Buffs_Initialize()
+        crusader_strike_counter_initialize()
+        redoubtcounter_initialize()
     end
 end
 

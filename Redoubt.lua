@@ -3,22 +3,14 @@ REDOUBT_LOSE = "Redoubt fades from you.";
 REDOUBT_BLOCKED = "blocked";
 REDOUBT_BLOCKS = 5
 
-redoubtcounter_movable = true;
-
-function redoubtcounter_OnLoad()
-    this:RegisterForDrag("LeftButton");
-    this:RegisterEvent("VARIABLES_LOADED"); --Watch for initialization
-    this:RegisterEvent("UNIT_AURA"); -- Watch for redoubr procs
-    
-	
-    PallyAddonLog("PallyAddon - Redoubt Loaded")
-end
-
 function redoubtcounter_initialize()
     if PALLY_ADDON_IS_PALADIN then
         --Sets redoubtcounter text above combo gauge (might remove ifv) 
         --redoubtcounter_display:SetText("redoubtCounter");
         update_redoubtcounter(0);
+        redoubtcounter_core:RegisterForDrag("LeftButton");
+        redoubtcounter_core:RegisterEvent("UNIT_AURA"); -- Watch for redoubr procs
+        PallyAddonLog("PallyAddon - Redoubt Loaded")
     else
         --Auto hides if Player is not a Paladin
         redoubtcounter_core:Hide();
@@ -87,10 +79,6 @@ end
 function redoubtcounter_OnEvent()
     if(event == "UNIT_AURA" and arg1 == "player") then
         checkRedoubt()
-    end
-
-    if(event == "VARIABLES_LOADED" ) then
-        redoubtcounter_initialize()
     end
 end
 

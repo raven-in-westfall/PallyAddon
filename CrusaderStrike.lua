@@ -1,35 +1,11 @@
 CRUSADER_STRIKE_TICKS = 3
 CRUSADER_STRIKE_CURRENT_TICKS = 0
-CRUSADER_STRIKE_MOVEABLE = true
 CRUSADER_STRIKE_VERBOSE = false
 CRUSADER_STRIKE_MAX_TIME = 30
 CRUSADER_STRIKE_TIME_LEFT = 0
 CRUSADER_STRIKE_STATUS_BAR_REFRESH_TIME_IN_SEC = .1
 CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME = 0
 CRUSADER_STRIKE_STATUS_BAR = nil
-
-function crusader_strike_counter_OnLoad()
-    this:RegisterForDrag("LeftButton");
-    this:RegisterEvent("VARIABLES_LOADED"); --Watch for initialization
-    this:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
-
-
-    PallyAddonLog("PallyAddon - crusader_strike Loaded", CRUSADER_STRIKE_VERBOSE)
-
-    -- Create a status bar as a child of the main frame
-    local frame = crusader_strike_timer
-    frame:SetFrameStrata("HIGH")
-
-    CRUSADER_STRIKE_STATUS_BAR = CreateFrame("StatusBar", nil, frame)
-    CRUSADER_STRIKE_STATUS_BAR:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar") -- Use a default texture
-    CRUSADER_STRIKE_STATUS_BAR:SetAllPoints(true)
-    CRUSADER_STRIKE_STATUS_BAR:SetStatusBarColor(0.9608, 0.8510, 0.0078)
-    CRUSADER_STRIKE_STATUS_BAR:SetMinMaxValues(0, CRUSADER_STRIKE_MAX_TIME)
-    CRUSADER_STRIKE_STATUS_BAR_text = CRUSADER_STRIKE_STATUS_BAR:CreateFontString(nil, "OVERLAY")
-    CRUSADER_STRIKE_STATUS_BAR_text:SetPoint("CENTER", 0, 0)
-    CRUSADER_STRIKE_STATUS_BAR_text:SetFontObject("GameFontNormal") -- Use a standard font
-    crusader_strike_update_status_bar()
-end
 
 function crusader_strike_status_bar_OnUpdate()
     CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME = CRUSADER_STRIKE_STATUS_BAR_ELAPSED_TIME + arg1
@@ -44,12 +20,32 @@ function crusader_strike_status_bar_OnUpdate()
 end
 
 function crusader_strike_counter_initialize()
-    if PALLY_ADDON_IS_PALADIN then
-        update_crusader_strike_counter(0);
-    else
+    if PALLY_ADDON_IS_PALADIN ==  false then
         --Auto hides if Player is not a Paladin
+        PallyAddonLog("Hiding Crusader Strike", CRUSADER_STRIKE_VERBOSE)
         crusader_strike_counter_core:Hide();
     end
+
+    update_crusader_strike_counter(0);
+    PallyAddonLog("Registering events for crusader strike", CRUSADER_STRIKE_VERBOSE);
+    crusader_strike_counter_core:RegisterForDrag("LeftButton");
+    crusader_strike_counter_core:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
+
+    -- Create a status bar as a child of the main frame
+    local frame = crusader_strike_timer
+    frame:SetFrameStrata("HIGH")
+    CRUSADER_STRIKE_STATUS_BAR = CreateFrame("StatusBar", nil, frame)
+    CRUSADER_STRIKE_STATUS_BAR:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar") -- Use a default texture
+    CRUSADER_STRIKE_STATUS_BAR:SetAllPoints(true)
+    CRUSADER_STRIKE_STATUS_BAR:SetStatusBarColor(0.9608, 0.8510, 0.0078)
+    CRUSADER_STRIKE_STATUS_BAR:SetMinMaxValues(0, CRUSADER_STRIKE_MAX_TIME)
+    CRUSADER_STRIKE_STATUS_BAR_text = CRUSADER_STRIKE_STATUS_BAR:CreateFontString(nil, "OVERLAY")
+    CRUSADER_STRIKE_STATUS_BAR_text:SetPoint("CENTER", 0, 0)
+    CRUSADER_STRIKE_STATUS_BAR_text:SetFontObject("GameFontNormal") -- Use a standard font
+    crusader_strike_update_status_bar()
+    crusader_strike_counter_core:Show();
+
+    PallyAddonLog("PallyAddon - crusader_strike Loaded", CRUSADER_STRIKE_VERBOSE)
 end 
 
 function update_crusader_strike_counter(crusader_strike)
@@ -89,13 +85,14 @@ function check_crusader_strike()
             update_crusader_strike_counter(0)
             break -- No more buffs to check
         end
+        PallyAddonLog("Found buff ".. name, CRUSADER_STRIKE_VERBOSE)
         if name == "Interface\\Icons\\Spell_Holy_CrusaderStrike" then
             if count ~= CRUSADER_STRIKE_CURRENT_TICKS then
                 CRUSADER_STRIKE_CURRENT_TICKS = count
                 PallyAddonLog("Found crusader_strike with " .. count .." charges", CRUSADER_STRIKE_VERBOSE)
                 update_crusader_strike_counter(count)
-                break
             end
+            break
         end
         index = index + 1
     end
@@ -104,9 +101,5 @@ end
 function crusader_strike_counter_OnEvent()
     if(event == "UNIT_AURA" and arg1 == "player") then
         check_crusader_strike()
-    end
-
-    if(event == "VARIABLES_LOADED" ) then
-        crusader_strike_counter_initialize()
     end
 end

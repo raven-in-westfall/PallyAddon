@@ -1,4 +1,3 @@
-CHECK_BUFFS_MOVABLE = true
 CHECK_BUFFS_VERBOSE = false
 
 AURAS = {
@@ -14,6 +13,7 @@ function Check_Buffs_Initialize()
         PallyAddonLog("Registering events")
         check_buffs_core:RegisterForDrag("LeftButton");
         check_buffs_core:RegisterEvent("UNIT_AURA"); -- Watch for aura changes
+        check_buffs_core:Show();
     else
         --Auto hides if Player is not a Paladin
         PallyAddonLog("Player is not pally", CHECK_BUFFS_VERBOSE)

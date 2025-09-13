@@ -122,17 +122,14 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnLoad>
-				redoubtcounter_OnLoad();
-			</OnLoad>
 			<OnEvent>
 				redoubtcounter_OnEvent();
 			</OnEvent>
 			<OnDragStart>
-				PallyAddonOnDragStart();
+				PallyAddonOnDragStart(redoubtcounter_core);
 			</OnDragStart>
 			<OnDragStop>
-				PallyAddonOnDragStop();
+				PallyAddonOnDragStop(redoubtcounter_core);
 			</OnDragStop>
 		</Scripts>
 	</Frame>
